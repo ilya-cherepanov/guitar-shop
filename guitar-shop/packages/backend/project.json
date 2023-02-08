@@ -55,6 +55,19 @@
           "codeCoverage": true
         }
       }
+    },
+    "db-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma validate --schema ./prisma/schema.prisma",
+        "cwd": "packages/backend"
+      }
+    },
+    "db-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --schema packages/backend/prisma/schema.prisma --skip-seed"
+      }
     }
   },
   "tags": []
