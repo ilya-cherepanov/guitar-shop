@@ -11,9 +11,56 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  name     String @db.VarChar(32)
-  password String @db.VarChar(255)
-  role     String @db.VarChar(32)
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  name     String    @db.VarChar(32)
+  password String    @db.VarChar(255)
+  role     String    @db.VarChar(32)
+  comments Comment[]
+  orders   Order[]
+}
+
+model Product {
+  id              Int         @id @default(autoincrement())
+  title           String      @db.VarChar(255)
+  description     String
+  type            String      @db.VarChar(32)
+  article         String      @db.VarChar(128)
+  numberOfStrings Int         @db.SmallInt
+  photo           String      @db.VarChar(255)
+  price           Decimal     @db.Money
+  createdAt       DateTime    @default(now())
+  comments        Comment[]
+  orderItems      OrderItem[]
+}
+
+model Comment {
+  id            Int      @id @default(autoincrement())
+  advantages    String   @db.VarChar(255)
+  disadvantages String   @db.VarChar(255)
+  text          String
+  rating        Int      @db.SmallInt
+  createdAt     DateTime @default(now())
+  author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId      Int
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId     Int
+}
+
+model Order {
+  id         Int         @id @default(autoincrement())
+  createdAt  DateTime    @default(now())
+  customer   User        @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId Int
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  quantity  Int
+
+  @@id([orderId, productId])
 }
