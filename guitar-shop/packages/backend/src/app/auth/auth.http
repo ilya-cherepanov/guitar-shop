@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:3333/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTY3NTkyNjk4MCwiZXhwIjoxNjc2MDEzMzgwfQ.sZQTN_VCKLUGMK5R7RB3TZbxWv9kJT7TLbSWPiUMYr0
+
+# Register user
+POST {{baseUrl}}/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Valera",
+  "email": "valera@mail.com",
+  "password": "pass1234"
+}
+
+###
+
+# Login user
+POST {{baseUrl}}/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "valera@mail.com",
+  "password": "pass1234"
+}
+
+###
+
+# Get user info
+GET {{baseUrl}}/auth/user HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}

@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@guitar-shop/core": ["packages/core/src/index.ts"],
       "@guitar-shop/shared-types": ["packages/shared-types/src/index.ts"]
     }
   },
