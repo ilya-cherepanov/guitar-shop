@@ -39,3 +39,6 @@ db
 
 # Evironment variables
 .env
+
+# Upload directory
+upload

@@ -24,6 +24,37 @@
         }
       }
     },
+    "build-cli": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/packages/cli",
+        "main": "packages/backend/src/cli.ts",
+        "tsConfig": "packages/backend/tsconfig.app.json",
+        "assets": ["packages/backend/src/assets"],
+        "webpackConfig": "packages/backend/webpack.config.js"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "cli": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "backend:build-cli"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "backend:build-cli:production"
+        }
+      }
+    },
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {

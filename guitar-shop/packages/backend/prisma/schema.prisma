@@ -30,6 +30,7 @@ model Product {
   photo           String      @db.VarChar(255)
   price           Decimal     @db.Money
   createdAt       DateTime    @default(now())
+  avgRating       Float       @default(0)
   comments        Comment[]
   orderItems      OrderItem[]
 }

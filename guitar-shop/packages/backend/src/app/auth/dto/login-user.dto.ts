@@ -16,7 +16,7 @@ export class LoginUserDTO {
     description: 'Пароль пользователя',
     example: 'pass1234',
   })
-  @Length(Password.MinLength, Password.MaxLength)
+  @Length(Password.LoginMinLength, Password.MaxLength)
   @IsString()
   password: string;
 }

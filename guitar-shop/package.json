@@ -2,7 +2,9 @@
   "name": "guitar-shop",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "cli": "npx nx run backend:build-cli && node dist/packages/cli/main.js"
+  },
   "private": true,
   "devDependencies": {
     "@nestjs/schematics": "^9.0.0",
@@ -21,12 +23,16 @@
     "@testing-library/react": "13.4.0",
     "@types/bcrypt": "^5.0.0",
     "@types/jest": "28.1.1",
+    "@types/lodash": "^4.14.191",
+    "@types/multer": "^1.4.7",
     "@types/node": "18.11.9",
+    "@types/nodemailer": "^6.4.7",
     "@types/passport": "^1.0.11",
     "@types/passport-jwt": "^3.0.8",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
     "@types/react-router-dom": "5.3.3",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "@vitejs/plugin-react": "^3.0.0",
@@ -54,22 +60,30 @@
     "vite": "^4.0.1",
     "vite-plugin-eslint": "^1.8.1",
     "vite-tsconfig-paths": "^4.0.2",
-    "vitest": "^0.25.8"
+    "vitest": "^0.25.8",
+    "webpack-shebang-plugin": "^1.1.8"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^10.0.1",
     "@nestjs/passport": "^9.0.2",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/serve-static": "^3.0.1",
     "@nestjs/swagger": "^6.2.1",
     "@prisma/client": "^4.10.0",
     "axios": "^1.0.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "handlebars": "^4.7.7",
     "joi": "^17.7.0",
+    "lodash": "^4.17.21",
+    "multer": "^1.4.5-lts.1",
+    "nest-commander": "^3.5.0",
+    "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "react": "18.2.0",
@@ -77,6 +91,7 @@
     "react-router-dom": "6.4.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "uuid": "^9.0.0"
   }
 }

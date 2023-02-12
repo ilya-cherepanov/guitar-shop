@@ -24,6 +24,17 @@ Content-Type: application/json
 
 ###
 
+# Login admin
+POST {{baseUrl}}/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "admin"
+}
+
+###
+
 # Get user info
 GET {{baseUrl}}/auth/user HTTP/1.1
 Content-Type: application/json

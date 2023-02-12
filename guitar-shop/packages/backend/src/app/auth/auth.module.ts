@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getJWTConfig } from '../../config/jwt.config';
 import { JWTStrategy } from './strategies/jwt.strategy';
+import { JWTAdminStrategy } from './strategies/jwt-admin.strategy';
 
 
 @Module({
@@ -18,7 +19,8 @@ import { JWTStrategy } from './strategies/jwt.strategy';
       useFactory: getJWTConfig,
     }),
   ],
-  providers: [AuthService, UserRepository, JWTStrategy],
+  providers: [AuthService, UserRepository, JWTStrategy, JWTAdminStrategy],
   controllers: [AuthController],
+  exports: [JWTStrategy],
 })
 export class AuthModule {}

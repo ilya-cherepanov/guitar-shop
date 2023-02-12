@@ -1,0 +1,116 @@
+@baseUrl = http://localhost:3333/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3NjIwMDYzNiwiZXhwIjoxNjc2Mjg3MDM2fQ.eK2RDfx1cUvv3cRQE5NrT8ihxUOS8o2aRZgURl-UPgI
+
+# Get many
+# GET {{baseUrl}}/products?productTypes[]=electric&numbersOfStrings[]=4&numbersOfStrings[]=6 HTTP/1.1
+# GET {{baseUrl}}/products?page=1 HTTP/1.1
+GET {{baseUrl}}/products?productTypes[]=electric&productTypes[]=acoustic&numbersOfStrings[]=6 HTTP/1.1
+Content-Type: application/json
+
+###
+
+# Get one
+GET {{baseUrl}}/products/52 HTTP/1.1
+Content-Type: application/json
+
+###
+
+# Delete product
+DELETE {{baseUrl}}/products/51 HTTP/1.1
+Content-Type: application/json
+
+###
+
+# Create product
+POST {{baseUrl}}/products HTTP/1.1
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+СURT Z30 PLUS
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+Электрогитара, инструмент в корпусе черного матового цвета. Выполнен из тополя, гриф из клена и амаранта. Модель имеет 24 лада, 5-позиционный переключатель, два звукоснимателя.
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+electric
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="article"
+
+SO754565
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="price"
+
+52000
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="numberOfStrings"
+
+6
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="createdAt"
+
+{{$localDatetime iso8601}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="photo"; filename="catalog-product.png"
+Content-Type: image/png
+
+< /mnt/f/assets/catalog-product.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+# Create product without photo
+POST {{baseUrl}}/products HTTP/1.1
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+СURT Z30 PLUS
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+Электрогитара, инструмент в корпусе черного матового цвета. Выполнен из тополя, гриф из клена и амаранта. Модель имеет 24 лада, 5-позиционный переключатель, два звукоснимателя.
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+electric
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="article"
+
+SO754565
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="price"
+
+52000
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="numberOfStrings"
+
+6
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="createdAt"
+
+{{$localDatetime iso8601}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+# Update product
+PATCH {{baseUrl}}/products/52 HTTP/1.1
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+СURT Z300 PLUSS
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="createdAt"
+
+{{$localDatetime iso8601}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
