@@ -5,3 +5,5 @@ export * from './lib/product-type.enum';
 export * from './lib/product.interface';
 export * from './lib/sort-order.enum';
 export * from './lib/comment.interface';
+export * from './lib/order-item.interface';
+export * from './lib/order.interface';

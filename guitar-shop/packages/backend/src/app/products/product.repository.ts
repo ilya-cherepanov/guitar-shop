@@ -33,6 +33,19 @@ export class ProductRepository {
     };
   }
 
+  public async findByMultipleIds(ids: number[]): Promise<Record<number, Product>> {
+    const products = await this.prismaService.product.findMany({
+      where: {id: {in: ids}},
+    });
+
+    console.log(products);
+
+    return products.reduce((acc, product) => {
+      acc[product.id] = product;
+      return acc;
+    }, {});
+  }
+
   public async findAll(
     skip: number,
     quantity: number,

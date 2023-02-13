@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3333/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3NjIwMDYzNiwiZXhwIjoxNjc2Mjg3MDM2fQ.eK2RDfx1cUvv3cRQE5NrT8ihxUOS8o2aRZgURl-UPgI
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3NjMwMTY5OSwiZXhwIjoxNjc2Mzg4MDk5fQ.Y3eqdYCPg1R0mpSZfdeSEn2gnI-nfu5DPlnmA8p3DGE
 
 # Get many
 # GET {{baseUrl}}/products?productTypes[]=electric&numbersOfStrings[]=4&numbersOfStrings[]=6 HTTP/1.1

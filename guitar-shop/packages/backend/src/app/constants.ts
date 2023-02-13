@@ -8,8 +8,10 @@ export const AUTH_NOT_VALID = 'Invalid email or password!';
 export const AUTH_USER_NOT_FOUND = 'User not found!';
 export const PHOTO_FILE_TYPES = /(png|jpg|jpeg)/;
 export const PRODUCTS_PER_PAGE = 9;
+export const ORDERS_PER_PAGE = 6;
 export const MAX_COMMENTS_COUNT = 50;
 export const PRODUCT_NOT_FOUND = 'The product with this id was not found!';
+export const ORDER_NOT_FOUND = 'The order with this id was not found!';
 export const MOCK_IMAGES_DIR = 'mock-images';
 export const USER_MUST_BE_ADMIN = 'The user must be an administrator!';
 

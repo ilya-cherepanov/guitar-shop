@@ -46,7 +46,6 @@ export class AuthController {
     description: 'Введен неверно email или пароль'
   })
   async login(@Body() dto: LoginUserDTO) {
-    console.log(dto);
     return fillObject(UserTokenRDO, await this.authService.login(dto));
   }
 

@@ -37,11 +37,12 @@ export class CommentsController {
       return fillObject(CommentRDO, await this.commentsService.create(productId, request.user['id'], dto));
   }
 
+  @Get('products/:id/comments')
   @ApiResponse({
     description: 'Получает последние комментарии к товару',
     type: [CommentRDO],
+    status: HttpStatus.OK
   })
-  @Get('products/:id/comments')
   async get(@Param('id', ParseIntPipe) productId: number) {
     return fillObject(CommentRDO, await this.commentsService.getLast(productId));
   }
