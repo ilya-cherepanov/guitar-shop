@@ -3,8 +3,8 @@
 
 # Get many
 # GET {{baseUrl}}/products?productTypes[]=electric&numbersOfStrings[]=4&numbersOfStrings[]=6 HTTP/1.1
-# GET {{baseUrl}}/products?page=1 HTTP/1.1
-GET {{baseUrl}}/products?productTypes[]=electric&productTypes[]=acoustic&numbersOfStrings[]=6 HTTP/1.1
+GET {{baseUrl}}/products?page=0&minPrice=800000 HTTP/1.1
+# GET {{baseUrl}}/products?productTypes[]=electric&productTypes[]=acoustic&numbersOfStrings[]=6 HTTP/1.1
 Content-Type: application/json
 
 ###
@@ -101,7 +101,7 @@ Content-Disposition: form-data; name="createdAt"
 ###
 
 # Update product
-PATCH {{baseUrl}}/products/52 HTTP/1.1
+PUT {{baseUrl}}/products/52 HTTP/1.1
 Authorization: Bearer {{accessToken}}
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 

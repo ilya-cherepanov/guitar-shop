@@ -1,10 +1,10 @@
 import { NUMBER_OF_STRINGS } from '@guitar-shop/core';
-import { NumberOfStringsType, ProductType } from '@guitar-shop/shared-types';
+import { NumberOfStringsType, ProductResponse, ProductType } from '@guitar-shop/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 
 
-export class ProductRDO {
+export class ProductRDO implements ProductResponse {
   @ApiProperty({
     description: 'Идентификатор товара',
     example: 412,
@@ -61,7 +61,7 @@ export class ProductRDO {
     example: '2023-02-09T14:43:11.000Z',
   })
   @Expose()
-  createdAt: Date;
+  createdAt: string;
 
   @ApiProperty({
     description: 'Фотография товара',
@@ -76,4 +76,12 @@ export class ProductRDO {
   })
   @Expose()
   avgRating: number;
+
+  @ApiProperty({
+    description: 'Количество комментариев',
+    example: 11,
+  })
+  @Transform((value) => value.obj._count.comments)
+  @Expose()
+  commentsCount: number;
 }

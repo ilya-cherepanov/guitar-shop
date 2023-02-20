@@ -16,4 +16,7 @@ export interface Product {
   price: number;
   createdAt: Date;
   avgRating?: number;
+  _count?: {
+    comments: number,
+  };
 }

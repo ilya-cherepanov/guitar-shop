@@ -77,7 +77,7 @@ export class GetProductsQuery {
   @Min(ProductPrice.Min)
   @IsNumber()
   @IsOptional()
-  @Transform(({value}) => parseInt(value) || ProductPrice.Min)
+  @Transform(({value}) => Number(value) || ProductPrice.Min)
   minPrice: number = ProductPrice.Min;
 
   @ApiProperty({
@@ -90,7 +90,7 @@ export class GetProductsQuery {
   @Min(ProductPrice.Min)
   @IsNumber()
   @IsOptional()
-  @Transform(({value}) => parseInt(value) || ProductPrice.Max)
+  @Transform(({value}) => Number(value) || ProductPrice.Max)
   maxPrice: number = ProductPrice.Max;
 
   @ApiProperty({

@@ -2,6 +2,7 @@ import { JWTPayload, UserRole } from '@guitar-shop/shared-types';
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AUTH_NOT_VALID, AUTH_USER_NOT_FOUND } from '../constants';
+import { MailService } from '../mail/mail.service';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { RegisterUserDTO } from './dto/register-user.dto';
 import { UserEntity } from './user.entity';
@@ -13,6 +14,7 @@ export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   public async register(dto: RegisterUserDTO) {
@@ -23,6 +25,8 @@ export class AuthService {
     })).setPassword(dto.password);
 
     const newUser = await this.userRepository.create(newUserEntity);
+    await this.mailService.sendRegistrationNotification(newUser.email, dto.password);
+
     return this.getToken({
       id: newUser.id,
       role: newUser.role,

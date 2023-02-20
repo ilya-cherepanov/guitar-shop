@@ -1,9 +1,10 @@
+import { RegisterUserRequest } from '@guitar-shop/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, Length } from 'class-validator';
 import { Name, Password } from '../../constants';
 
 
-export class RegisterUserDTO {
+export class RegisterUserDTO implements RegisterUserRequest {
   @ApiProperty({
     description: 'Имя пользователя',
     example: 'valera',

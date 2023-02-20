@@ -71,7 +71,6 @@ export class OrdersController {
   @UseGuards(JWTAdminAuthGuard)
   @ApiBearerAuth()
   @ApiResponse({
-    type: OrderRDO,
     description: 'Удаляет заказ по идентификатору',
     status: HttpStatus.OK,
   })
@@ -85,5 +84,24 @@ export class OrdersController {
   })
   async delete(@Param('id', ParseIntPipe) id: number) {
     await this.ordersService.delete(id);
+  }
+
+  @Delete(':orderId/products/:productId')
+  @UseGuards(JWTAdminAuthGuard)
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Удаляет позицию заказа',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Заказ или товар с данным id не найден',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Пользователь не аутентифицирован или не является администратором',
+  })
+  async deleteOrderItem(@Param('orderId', ParseIntPipe) orderId: number, @Param('productId', ParseIntPipe) productId: number) {
+    await this.ordersService.deleteOrderItem(orderId, productId);
   }
 }

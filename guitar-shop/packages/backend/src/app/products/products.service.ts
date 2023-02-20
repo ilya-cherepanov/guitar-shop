@@ -35,14 +35,29 @@ export class ProductsService {
   public async getAll(query: GetProductsQuery) {
     const skip = query.page * PRODUCTS_PER_PAGE;
 
-    return this.productRepository.findAll(skip, PRODUCTS_PER_PAGE, {
+    const orders = await this.productRepository.findAll(skip, PRODUCTS_PER_PAGE, {
       numbersOfString: query.numbersOfStrings,
       productTypes: query.productTypes,
+      minPrice: query.minPrice,
+      maxPrice: query.maxPrice,
     }, {
       sortByAdding: query.sortByAdding,
       sortByPrice: query.sortByPrice,
       sortByRating: query.sortByRating,
     });
+
+    const productsCount = await this.productRepository.getCount({
+      numbersOfString: query.numbersOfStrings,
+      productTypes: query.productTypes,
+    });
+    const totalPages = Math.ceil(productsCount / PRODUCTS_PER_PAGE);
+
+    return {
+      currentPage: query.page,
+      totalPages,
+      items: orders,
+      ...await this.productRepository.getPrices(),
+    };
   }
 
   public async update(productId: number, photo: string | null, dto: UpdateProductDTO) {

@@ -1,5 +1,5 @@
 import { fillObject } from '@guitar-shop/core';
-import { Body, Controller, Delete, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JWTAdminAuthGuard } from '../auth/guards/jwt-admin-auth.guard';
@@ -8,6 +8,7 @@ import { CreateProductDTO } from './dto/create-product.dto';
 import { UpdateProductDTO } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
 import { GetProductsQuery } from './query/get-produts.query';
+import { ProductListRDO } from './rdo/product-list.rdo';
 import { ProductRDO } from './rdo/product.rdo';
 
 
@@ -40,7 +41,7 @@ export class ProductsController {
     description: 'Возвращает карточки товаров',
   })
   public async getAll(@Query() query: GetProductsQuery) {
-    return fillObject(ProductRDO, await this.productsService.getAll(query));
+    return fillObject(ProductListRDO, await this.productsService.getAll(query));
   }
 
   @Post()
@@ -65,7 +66,7 @@ export class ProductsController {
     return fillObject(ProductRDO, await this.productsService.create(file.filename, dto));
   }
 
-  @Patch(':id')
+  @Put(':id')
   @UseGuards(JWTAdminAuthGuard)
   @UseInterceptors(FileInterceptor('photo'))
   @ApiBearerAuth()

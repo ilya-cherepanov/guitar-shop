@@ -1,9 +1,10 @@
+import { OrderListResponse } from '@guitar-shop/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { OrderRDO } from './order.rdo';
 
 
-export class OrderListRDO {
+export class OrderListRDO implements OrderListResponse {
   @ApiProperty({
     description: 'Номер текущей страницы',
     example: 2,

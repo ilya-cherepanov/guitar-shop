@@ -11,6 +11,7 @@ import { generateAdmin, generateProduct } from '../mock/generators';
 @Command({
   name: 'generate',
   arguments: '<n> <connection_string>',
+  description: 'Генерирует <n> товаров для заполнения базы данный указанной в <connection string>'
 })
 export class GenerateCommand extends CommandRunner {
   private prismaClient: PrismaClient;

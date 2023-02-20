@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getJWTConfig } from '../../config/jwt.config';
 import { JWTStrategy } from './strategies/jwt.strategy';
 import { JWTAdminStrategy } from './strategies/jwt-admin.strategy';
+import { MailModule } from '../mail/mail.module';
 
 
 @Module({
@@ -18,6 +19,7 @@ import { JWTAdminStrategy } from './strategies/jwt-admin.strategy';
       inject: [ConfigService],
       useFactory: getJWTConfig,
     }),
+    MailModule,
   ],
   providers: [AuthService, UserRepository, JWTStrategy, JWTAdminStrategy],
   controllers: [AuthController],

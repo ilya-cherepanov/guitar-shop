@@ -1,9 +1,10 @@
+import { CreateCommentRequest } from '@guitar-shop/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsString, Length, Max, Min } from 'class-validator';
 import { CommentAdvantages, CommentDisadvantages, CommentRating, CommentText } from '../../constants';
 
 
-export class CreateCommentDTO {
+export class CreateCommentDTO implements CreateCommentRequest {
   @ApiProperty({
     description: 'Достоинства товара',
     example: 'Хороший корпус, чистый звук, стурны хорошего качества',

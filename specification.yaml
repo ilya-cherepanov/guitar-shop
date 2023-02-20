@@ -1,0 +1,835 @@
+openapi: 3.0.0
+paths:
+  /api/auth/register:
+    post:
+      operationId: AuthController_register
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserDTO'
+      responses:
+        '201':
+          description: Регистрирует нового пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTokenRDO'
+        '400':
+          description: Введены не валидные данные
+      tags: &ref_0
+        - Auth
+  /api/auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDTO'
+      responses:
+        '200':
+          description: Аутентифицирует пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTokenRDO'
+        '400':
+          description: Введены не валидные данные
+        '401':
+          description: Введен неверно email или пароль
+      tags: *ref_0
+  /api/auth/user:
+    get:
+      operationId: AuthController_get
+      parameters: []
+      responses:
+        '200':
+          description: Возвращает подробную информацию о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRDO'
+        '401':
+          description: Неверный или истекший access токен
+        '404':
+          description: Не найден пользователь с таким id
+      tags: *ref_0
+      security:
+        - bearer: []
+  /api/products/{id}:
+    get:
+      operationId: ProductsController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Возвращает карточку товара c данным идентификатором
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductRDO'
+        '404':
+          description: Товар с данным ID не найден
+      tags: &ref_1
+        - Products
+    put:
+      operationId: ProductsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateProductDTO'
+      responses:
+        '200':
+          description: Возвращает обновленную карточку товара
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductRDO'
+        '401':
+          description: Пользователь не аутентифицирован или не является администратором
+        '404':
+          description: Товар с данным ID не найден
+      tags: *ref_1
+      security:
+        - bearer: []
+    delete:
+      operationId: ProductsController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Удаляет карточку товара
+        '401':
+          description: Пользователь не аутентифицирован или не является администратором
+        '404':
+          description: Товар с данным ID не найден
+      tags: *ref_1
+      security:
+        - bearer: []
+  /api/products:
+    get:
+      operationId: ProductsController_getAll
+      parameters:
+        - name: productTypes
+          required: false
+          in: query
+          description: Тип товара
+          example:
+            - acoustic
+            - ukulele
+          schema:
+            default: []
+            type: array
+            items:
+              type: string
+              enum:
+                - electric
+                - acoustic
+                - ukulele
+        - name: numbersOfStrings
+          required: false
+          in: query
+          description: Количество струн
+          example:
+            - 4
+            - 6
+          schema:
+            default: []
+            type: array
+            items:
+              type: number
+              enum:
+                - 4
+                - 6
+                - 7
+                - 12
+        - name: minPrice
+          required: false
+          in: query
+          description: Минимальная цена
+          example: 10000
+          schema:
+            default: 100
+            type: number
+        - name: maxPrice
+          required: false
+          in: query
+          description: Максимальная цена
+          example: 25000
+          schema:
+            default: 1000000
+            type: number
+        - name: sortByPrice
+          required: false
+          in: query
+          description: Отсортировать по цене
+          example: desc
+          schema:
+            enum:
+              - asc
+              - desc
+            type: string
+        - name: sortByRating
+          required: false
+          in: query
+          description: Отсортировать по цене
+          example: desc
+          schema:
+            enum:
+              - asc
+              - desc
+            type: string
+        - name: sortByAdding
+          required: false
+          in: query
+          description: Отсортировать по цене
+          example: desc
+          schema:
+            default: desc
+            enum:
+              - asc
+              - desc
+            type: string
+      responses:
+        '200':
+          description: Возвращает карточки товаров
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductRDO'
+      tags: *ref_1
+    post:
+      operationId: ProductsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateProductDTO'
+      responses:
+        '201':
+          description: Возвращает новую карточку товара
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductRDO'
+        '401':
+          description: Пользователь не аутентифицирован или не является администратором
+      tags: *ref_1
+      security:
+        - bearer: []
+  /api/products/{id}/comments:
+    post:
+      operationId: CommentsController_create
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommentDTO'
+      responses:
+        '201':
+          description: Создает новый комментарий к товару
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentRDO'
+        '401':
+          description: Пользователь не аутентифицирован
+        '404':
+          description: Не найден товар с данным ID
+      tags: &ref_2
+        - Comments
+      security:
+        - bearer: []
+    get:
+      operationId: CommentsController_get
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Получает последние комментарии к товару
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentRDO'
+      tags: *ref_2
+  /api/orders/{id}:
+    get:
+      operationId: OrdersController_get
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Возвращает заказ по id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderRDO'
+        '401':
+          description: Пользователь не аутентифицирован или не является администратором
+      tags: &ref_3
+        - Orders
+      security:
+        - bearer: []
+    delete:
+      operationId: OrdersController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Удаляет заказ по идентификатору
+        '401':
+          description: Пользователь не аутентифицирован или не является администратором
+        '404':
+          description: Заказ с данным id не найден
+      tags: *ref_3
+      security:
+        - bearer: []
+  /api/orders:
+    get:
+      operationId: OrdersController_getMany
+      parameters:
+        - name: sortByPrice
+          required: false
+          in: query
+          description: Отсортировать по цене
+          example: desc
+          schema:
+            enum:
+              - asc
+              - desc
+            type: string
+        - name: sortByAdding
+          required: false
+          in: query
+          description: Отсортировать по дате заказа
+          example: desc
+          schema:
+            default: desc
+            enum:
+              - asc
+              - desc
+            type: string
+      responses:
+        '200':
+          description: Получить список заказов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderListRDO'
+        '401':
+          description: Пользователь не аутентифицирован или не является администратором
+      tags: *ref_3
+      security:
+        - bearer: []
+    post:
+      operationId: OrdersController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOrderDTO'
+      responses:
+        '201':
+          description: Создает новый заказ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderRDO'
+        '401':
+          description: Пользователь не аутентифицирован
+        '404':
+          description: Товар с данным id не найден
+      tags: *ref_3
+      security:
+        - bearer: []
+  /api/orders/{orderId}/products/{productId}:
+    delete:
+      operationId: OrdersController_deleteOrderItem
+      parameters:
+        - name: orderId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: productId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Удаляет позицию заказа
+        '401':
+          description: Пользователь не аутентифицирован или не является администратором
+        '404':
+          description: Заказ или товар с данным id не найден
+      tags: *ref_3
+      security:
+        - bearer: []
+info:
+  title: Guitar Store API
+  description: ''
+  version: '1.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    RegisterUserDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Имя пользователя
+          example: valera
+        email:
+          type: string
+          description: Email пользователя
+          example: valera@mail.com
+        password:
+          type: string
+          description: Пароль пользователя
+          example: pass1234
+      required:
+        - name
+        - email
+        - password
+    UserTokenRDO:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token
+          example: >-
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTY3NTkyNDczMywiZXhwIjoxNjc2MDExMTMzfQ.No7d03ICMRgG9jYRGnNg79eENFPoayTpxocYv7re2cw
+      required:
+        - accessToken
+    LoginUserDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email пользователя
+          example: valera@mail.com
+        password:
+          type: string
+          description: Пароль пользователя
+          example: pass1234
+      required:
+        - email
+        - password
+    UserRDO:
+      type: object
+      properties:
+        id:
+          type: number
+          description: ID пользователя
+          example: 42
+        email:
+          type: string
+          description: Email пользователя
+          example: valera@email.com
+        name:
+          type: string
+          description: Имя пользователя
+          example: valera@email.com
+        role:
+          type: string
+          description: Роль пользователя
+          example: admin
+      required:
+        - id
+        - email
+        - name
+        - role
+    ProductRDO:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Идентификатор товара
+          example: 412
+        title:
+          type: string
+          description: Название товара
+          example: СURT Z30 PLUS
+        description:
+          type: string
+          description: Описание товара
+          example: >-
+            Электрогитара, инструмент в корпусе черного матового цвета. Выполнен
+            из тополя, гриф из клена и амаранта. Модель имеет 24 лада,
+            5-позиционный переключатель, два звукоснимателя.
+        type:
+          type: string
+          description: Тип товара
+          example: electric
+          enum:
+            - electric
+            - acoustic
+            - ukulele
+        article:
+          type: string
+          description: Артикул товара
+          example: SO754565
+        numberOfStrings:
+          type: number
+          description: Количество струн
+          enum: &ref_4
+            - 4
+            - 6
+            - 7
+            - 12
+          example: 6
+        price:
+          type: number
+          description: Цена товара
+          example: 52000
+        createdAt:
+          type: string
+          description: Дата добавления товара
+          example: '2023-02-09T14:43:11.000Z'
+        photo:
+          type: string
+          description: Фотография товара
+          example: 0c5b335b-f157-422f-a5b5-ca8bc17dfd46.png
+        avgRating:
+          type: number
+          description: Рейтинг товара
+          example: 4.2
+        commentsCount:
+          type: number
+          description: Количество комментариев
+          example: 11
+      required:
+        - id
+        - title
+        - description
+        - type
+        - article
+        - numberOfStrings
+        - price
+        - createdAt
+        - photo
+        - avgRating
+        - commentsCount
+    CreateProductDTO:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название товара
+          example: СURT Z30 PLUS
+        description:
+          type: string
+          description: Описание товара
+          example: >-
+            Электрогитара, инструмент в корпусе черного матового цвета. Выполнен
+            из тополя, гриф из клена и амаранта. Модель имеет 24 лада,
+            5-позиционный переключатель, два звукоснимателя.
+        type:
+          type: string
+          description: Тип товара
+          example: electric
+          enum: &ref_5
+            - electric
+            - acoustic
+            - ukulele
+        article:
+          type: string
+          description: Артикул товара
+          example: SO754565
+        numberOfStrings:
+          type: number
+          description: Количество струн
+          enum: *ref_4
+          example: 6
+        price:
+          type: number
+          description: Цена товара
+          example: 52000
+        createdAt:
+          format: date-time
+          type: string
+          description: Дата добавления товара
+          example: '2023-02-09T14:43:11.000Z'
+        photo:
+          type: string
+          format: binary
+          description: Фотография товара
+      required:
+        - title
+        - description
+        - type
+        - article
+        - numberOfStrings
+        - price
+        - createdAt
+        - photo
+    UpdateProductDTO:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название товара
+          example: СURT Z30 PLUS
+        description:
+          type: string
+          description: Описание товара
+          example: >-
+            Электрогитара, инструмент в корпусе черного матового цвета. Выполнен
+            из тополя, гриф из клена и амаранта. Модель имеет 24 лада,
+            5-позиционный переключатель, два звукоснимателя.
+        type:
+          type: string
+          description: Тип товара
+          example: electric
+          enum: *ref_5
+        article:
+          type: string
+          description: Артикул товара
+          example: SO754565
+        numberOfStrings:
+          type: number
+          description: Количество струн
+          enum: *ref_4
+          example: 6
+        price:
+          type: number
+          description: Цена товара
+          example: 52000
+        createdAt:
+          format: date-time
+          type: string
+          description: Дата добавления товара
+          example: '2023-02-09T14:43:11.000Z'
+        photo:
+          type: string
+          format: binary
+          description: Фотография товара
+    CreateCommentDTO:
+      type: object
+      properties:
+        advantages:
+          type: string
+          description: Достоинства товара
+          example: Хороший корпус, чистый звук, стурны хорошего качества
+        disadvantages:
+          type: string
+          description: Недостатки товара
+          example: Тугие колки
+        text:
+          type: string
+          description: Комментарий
+          example: >-
+            У гитары отличный цвет, хороше дерево. Тяжелая, в комплекте нет
+            чехла и ремня.
+        rating:
+          type: number
+          description: Оценка товара
+          example: 5
+          minimum: 1
+          maximum: 5
+      required:
+        - advantages
+        - disadvantages
+        - text
+        - rating
+    CommentAuthorRDO:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Идентификатор пользователя
+          example: 41
+        name:
+          type: string
+          description: Имя пользователя
+          example: Valera
+      required:
+        - id
+        - name
+    CommentRDO:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Уникальный идентификатор комментария
+          example: 523
+        advantages:
+          type: string
+          description: Достоинства товара
+          example: Хороший корпус, чистый звук, струны хорошего качества
+        disadvantages:
+          type: string
+          description: Недостатки товара
+          example: Тугие колки
+        text:
+          type: string
+          description: Комментарий
+          example: >-
+            У гитары отличный цвет, хороше дерево. Тяжелая, в комплекте нет
+            чехла и ремня.
+        rating:
+          type: number
+          description: Оценка товара
+          example: 5
+          minimum: 1
+          maximum: 5
+        createdAt:
+          type: string
+          description: Дата создания комментария
+          example: '2023-02-09T14:43:11.000Z'
+        author:
+          description: Автор комментария
+          allOf:
+            - $ref: '#/components/schemas/CommentAuthorRDO'
+        productId:
+          type: number
+          description: Идентификатор товара
+          example: 234
+      required:
+        - id
+        - advantages
+        - disadvantages
+        - text
+        - rating
+        - createdAt
+        - author
+        - productId
+    OrderItemRDO:
+      type: object
+      properties:
+        productId:
+          type: number
+          description: Идентификатор товара
+          example: 152
+        quantity:
+          type: number
+          description: Количество товара
+          example: 2
+        sumPrice:
+          type: number
+          description: Сумма заказа
+          example: 15499
+        product:
+          description: Краткая информация о товаре
+          allOf:
+            - $ref: '#/components/schemas/ProductRDO'
+      required:
+        - productId
+        - quantity
+        - sumPrice
+        - product
+    OrderRDO:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Идентификатор заказа
+          example: 10
+        orderItems:
+          description: Позиции заказа
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemRDO'
+        createdAt:
+          type: string
+          description: Дата оформления заказа
+          example: '2023-02-13T15:59:54.548Z'
+        sumPrice:
+          type: number
+          description: Сумма заказа
+          example: 15499
+      required:
+        - id
+        - orderItems
+        - createdAt
+        - sumPrice
+    OrderListRDO:
+      type: object
+      properties:
+        page:
+          type: number
+          description: Номер текущей страницы
+          example: 2
+        totalPages:
+          type: number
+          description: Всего страниц с заказами
+          example: 14
+        items:
+          description: Заказы
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderRDO'
+      required:
+        - page
+        - totalPages
+        - items
+    AddOrderDTO:
+      type: object
+      properties:
+        items:
+          description: Позиции заказа
+          example:
+            items:
+              - productId: 20
+                quantity: 1
+              - productId: 252
+                quantity: 1
+          type: array
+          items:
+            type: string
+      required:
+        - items

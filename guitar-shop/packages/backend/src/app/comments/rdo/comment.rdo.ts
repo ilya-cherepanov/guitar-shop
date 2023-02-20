@@ -1,3 +1,4 @@
+import { CommentResponse } from '@guitar-shop/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { CommentRating } from '../../constants';
@@ -20,7 +21,7 @@ class CommentAuthorRDO {
 }
 
 
-export class CommentRDO {
+export class CommentRDO implements CommentResponse {
   @ApiProperty({
     description: 'Уникальный идентификатор комментария',
     example: 523,

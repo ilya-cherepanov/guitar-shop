@@ -19,6 +19,13 @@ export class ProductRepository {
   public async findById(id: number): Promise<Product | null> {
     const product = await this.prismaService.product.findFirst({
       where: { id },
+      include: {
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
     });
 
     if (!product) {
@@ -36,14 +43,44 @@ export class ProductRepository {
   public async findByMultipleIds(ids: number[]): Promise<Record<number, Product>> {
     const products = await this.prismaService.product.findMany({
       where: {id: {in: ids}},
+      include: {
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
     });
-
-    console.log(products);
 
     return products.reduce((acc, product) => {
       acc[product.id] = product;
       return acc;
     }, {});
+  }
+
+  public async getCount(filters: ProductFilters): Promise<number> {
+    return this.prismaService.product.count({
+      where: {
+        type: filters.productTypes.length > 0 ? {in: filters.productTypes} : undefined,
+        numberOfStrings: filters.numbersOfString.length > 0 ? {in: filters.numbersOfString} : undefined,
+      }
+    });
+  }
+
+  public async getPrices() {
+    const prices = await this.prismaService.product.aggregate({
+      _min: {
+        price: true,
+      },
+      _max: {
+        price: true,
+      },
+    });
+
+    return {
+      minPrice: prices._min.price.toNumber(),
+      maxPrice: prices._max.price.toNumber(),
+    };
   }
 
   public async findAll(
@@ -58,6 +95,17 @@ export class ProductRepository {
       where: {
         type: filters.productTypes.length > 0 ? {in: filters.productTypes} : undefined,
         numberOfStrings: filters.numbersOfString.length > 0 ? {in: filters.numbersOfString} : undefined,
+        price: {
+          gte: filters.minPrice,
+          lte: filters.maxPrice,
+        },
+      },
+      include: {
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
       },
       take: quantity,
       skip
@@ -75,7 +123,6 @@ export class ProductRepository {
     }
     query.orderBy = orderBy;
 
-
     return (await this.prismaService.product.findMany(query)).map((product) => ({
       ...product,
       type: product.type as ProductType,
@@ -87,6 +134,13 @@ export class ProductRepository {
   public async create(productEntity: ProductEntity): Promise<Product> {
     const newProduct = await this.prismaService.product.create({
       data: productEntity.toPrismaObject(),
+      include: {
+        _count: {
+          select: {
+            comments: true,
+          }
+        }
+      },
     });
 
     return {
@@ -104,6 +158,13 @@ export class ProductRepository {
     const updatedProduct = await this.prismaService.product.update({
       where: { id: productId },
       data: productEntity.toPrismaObject(),
+      include: {
+        _count: {
+          select: {
+            comments: true
+          },
+        },
+      },
     });
 
     return {

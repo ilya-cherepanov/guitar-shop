@@ -1,9 +1,9 @@
-import { UserRole } from '@guitar-shop/shared-types';
+import { UserResponse, UserRole } from '@guitar-shop/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
 
-export class UserRDO {
+export class UserRDO implements UserResponse {
   @ApiProperty({
     description: 'ID пользователя',
     example: 42,

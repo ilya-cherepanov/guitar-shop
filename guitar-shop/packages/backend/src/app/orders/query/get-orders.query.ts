@@ -1,10 +1,10 @@
-import { SortOrder } from '@guitar-shop/shared-types';
+import { OrdersQueryParams, SortOrder } from '@guitar-shop/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, Min } from 'class-validator';
 
 
-export class GetOrdersQuery {
+export class GetOrdersQuery implements OrdersQueryParams {
   @ApiProperty({
     description: 'Страница загрузки товаров',
     default: 0,

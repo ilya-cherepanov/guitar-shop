@@ -1,3 +1,4 @@
+import { CreateOrderRequest } from '@guitar-shop/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { ArrayMinSize, ArrayUnique, IsArray, IsInt, Min, ValidateNested } from 'class-validator';
@@ -22,7 +23,7 @@ class OrderItem {
 }
 
 
-export class AddOrderDTO {
+export class AddOrderDTO implements CreateOrderRequest {
   @ApiProperty({
     description: 'Позиции заказа',
     type: Array<OrderItem>,

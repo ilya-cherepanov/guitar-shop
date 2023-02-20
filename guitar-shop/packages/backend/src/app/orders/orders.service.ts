@@ -7,6 +7,7 @@ import { OrderRepository } from './order.repository';
 import { OrderEntity } from './entities/order.entity';
 import { GetOrdersQuery } from './query/get-orders.query';
 import { ORDERS_PER_PAGE, ORDER_NOT_FOUND, PRODUCT_NOT_FOUND } from '../constants';
+import { MailService } from '../mail/mail.service';
 
 
 @Injectable()
@@ -14,13 +15,12 @@ export class OrdersService {
   constructor(
     private readonly orderRepository: OrderRepository,
     private readonly productRepository: ProductRepository,
+    private readonly mailService: MailService,
   ) {}
 
   async create(dto: AddOrderDTO, userId: number) {
     const productIds = dto.items.map((orderItem) => orderItem.productId);
-    console.log(productIds);
     const products = await this.productRepository.findByMultipleIds(productIds);
-    console.log(products);
 
     if (productIds.length > 0 && (isEmpty(products)
       || Object.keys(products).length !== productIds.length)) {
@@ -39,7 +39,12 @@ export class OrdersService {
       customerId: userId,
     });
 
-    return this.orderRepository.create(orderEntity);
+
+    const newOrder = await this.orderRepository.create(orderEntity);
+
+    await this.mailService.setOrderNotification(newOrder.id);
+
+    return newOrder;
   }
 
   async getOne(orderId) {
@@ -72,5 +77,9 @@ export class OrdersService {
 
   async delete(orderId: number) {
     await this.orderRepository.delete(orderId);
+  }
+
+  async deleteOrderItem(orderId: number, productId: number) {
+    await this.orderRepository.deleteOrderItem(orderId, productId);
   }
 }

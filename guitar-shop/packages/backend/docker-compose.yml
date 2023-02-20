@@ -8,6 +8,7 @@ services:
       POSTGRES_USER: "admin"
       POSTGRES_PASSWORD: "password1234"
       POSTGRES_DB: "guitar-shop"
+    restart: always
     ports:
       - "5432:5432"
     healthcheck:
@@ -30,15 +31,16 @@ services:
       PGADMIN_DEFAULT_EMAIL: "admin@mail.com"
       PGADMIN_DEFAULT_PASSWORD: "password1234"
       PGADMIN_CONFIG_SERVER_MODE: "False"
+    restart: always
     ports:
       - "8082:80"
-    restart: unless-stopped
     networks:
       - postgres
 
   fakesmtp:
     image: gessnerfl/fake-smtp-server:1.10.4
     container_name: fakesmtp
+    restart: always
     ports:
       - 5025:5025
       - 1083:5080

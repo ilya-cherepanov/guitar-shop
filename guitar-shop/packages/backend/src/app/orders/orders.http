@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3333/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3NjMwMTY5OSwiZXhwIjoxNjc2Mzg4MDk5fQ.Y3eqdYCPg1R0mpSZfdeSEn2gnI-nfu5DPlnmA8p3DGE
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3NjY0ODkyOSwiZXhwIjoxNjc2NzM1MzI5fQ.-TQ-tPkWZaKPLwtkYbBLb7Wv2xuADCbw8WFdjjoQg9k
 
 # Get one
 GET {{baseUrl}}/orders/2 HTTP/1.1
