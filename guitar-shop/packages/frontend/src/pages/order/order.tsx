@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { formatPrice } from '../../components/price-filter/utils';
 import Spinner from '../../components/spinner/spinner';
 import { LoadingStatus } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchOneOrder, selectOneOrder, selectOneOrderStatus } from '../../store/slices/one-order-slice';
-import { selectOrder } from '../../store/slices/orders-slice';
 import { formatDate, formatOrderId } from '../../utils';
 import NotFound from '../not-found/not-found';
 import OrderItem from './order-item';
@@ -17,9 +16,13 @@ export default function Order() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate()
 
-  useEffect(() => {
+  const fetch = useCallback(() => {
     dispatch(fetchOneOrder(Number(id)));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    fetch();
+  }, [dispatch, id, fetch]);
 
   if (loadingStatus === LoadingStatus.Failed) {
     return <NotFound />;
@@ -71,7 +74,7 @@ export default function Order() {
             </tfoot>
           </table>
           <ul className="order__list order-list">
-            {order.orderItems.map((orderItem) => <OrderItem orderId={order.id} orderItem={orderItem} key={orderItem.productId} />)}
+            {order.orderItems.map((orderItem) => <OrderItem orderId={order.id} orderItem={orderItem} key={orderItem.productId} onDelete={() => fetch()} />)}
           </ul>
           <button className="button order__button button--small button--black-border" type="button" onClick={(evt) => {evt.preventDefault(); navigate('/order-list')}}>
             Вернуться к списку заказов

@@ -2,7 +2,6 @@ import {
   NumberOfStringsType,
   Product,
   ProductType,
-  SortOrder,
 } from '@guitar-shop/shared-types';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
@@ -186,60 +185,5 @@ export class ProductRepository {
         throw err;
       }
     }
-  }
-
-  private buildPostgresQuery(
-    skip: number,
-    quantity: number,
-    filters: ProductFilters,
-    sorting: SortingParams
-  ) {
-    const productTypeFilters = Prisma.join(filters.productTypes);
-    const numberOfStringsFilters = Prisma.join(filters.numbersOfString);
-    const productTypeFiltersQuery =
-      filters.productTypes.length > 0
-        ? Prisma.sql`"Product".type IN (${productTypeFilters})`
-        : Prisma.sql`TRUE`;
-    const numberOfStringFiltersQuery =
-      filters.numbersOfString.length > 0
-        ? Prisma.sql`"Product"."numberOfStrings" IN (${numberOfStringsFilters})`
-        : Prisma.sql`TRUE`;
-    const where = Prisma.sql`WHERE ${productTypeFiltersQuery} AND ${numberOfStringFiltersQuery}`;
-
-    const sortByPrice =
-      sorting.sortByPrice === SortOrder.Ascending
-        ? Prisma.sql`, "Product".price ASC`
-        : Prisma.sql`, "Product".price DESC`;
-    const sortByRating =
-      sorting.sortByRating === SortOrder.Ascending
-        ? Prisma.sql`, "avgRating" ASC`
-        : Prisma.sql`, "avgRating" DESC`;
-    const orderBy = Prisma.sql`
-      ORDER BY "Product"."createdAt" DESC
-      ${sorting.sortByPrice ? sortByPrice : Prisma.empty}
-      ${sorting.sortByRating ? sortByRating : Prisma.empty}
-    `;
-
-    const query = Prisma.sql`
-      SELECT
-        "Product".id,
-        "Product".title,
-        "Product".type,
-        "Product".description,
-        "Product".article,
-        "Product".price,
-        "Product"."numberOfStrings",
-        "Product".photo,
-        "Product"."createdAt",
-        AVG("Comment".rating) AS "avgRating"
-      FROM "Product"
-      INNER JOIN "Comment" ON "Comment"."productId" = "Product".id
-      ${where}
-      GROUP BY "Product".id
-      ${orderBy}
-      LIMIT ${quantity} OFFSET ${skip};
-    `;
-
-    return query;
   }
 }

@@ -1,7 +1,7 @@
 import { NUMBER_OF_STRINGS } from '@guitar-shop/core';
 import { NumberOfStringsType, ProductType } from '@guitar-shop/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Transform, Type } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
 
 class ProductRDO {

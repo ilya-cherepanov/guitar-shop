@@ -1,4 +1,5 @@
 import { ChangeEventHandler, MouseEventHandler, useRef, useState } from "react";
+import { BACKEND_STATIC_URL } from "../../constants";
 
 interface ImageInputProps {
   initialImage?: string;
@@ -42,7 +43,7 @@ export default function ImageInput({initialImage}: ImageInputProps) {
     <div className="edit-item-image add-item__form-image">
       <input className="visually-hidden" type="file" name="photo" required disabled={initialImage !== null && initialImage !== '' && imagePreview === null} ref={fileInput} onChange={handleInputChange} />
       <div className="edit-item-image__image-wrap">
-        {showImage && <img className="edit-item-image__image" src={imagePreview || `http://localhost:3333/static/${initialImage}`} width="133" height="332" alt="Preview" />}
+        {showImage && <img className="edit-item-image__image" src={imagePreview || `${BACKEND_STATIC_URL}/${initialImage}`} width="133" height="332" alt="Preview" />}
       </div>
       <div className="edit-item-image__btn-wrap">
         <button className="button button--small button--black-border edit-item-image__btn" type="button" onClick={handleAddClick}>

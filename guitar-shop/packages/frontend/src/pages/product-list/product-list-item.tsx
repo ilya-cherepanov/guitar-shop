@@ -3,7 +3,7 @@ import { MouseEventHandler } from 'react';
 import { Link } from 'react-router-dom';
 import { formatPrice } from '../../components/price-filter/utils';
 import Rating from '../../components/rating/rating';
-import { ProductTypeTranslation } from '../../constants';
+import { BACKEND_STATIC_URL, ProductTypeTranslation } from '../../constants';
 import { useAppDispatch } from '../../hooks';
 import { deleteProduct } from '../../store/slices/products-slice';
 import { formatDate } from '../../utils';
@@ -27,7 +27,7 @@ export default function ProductListItem({ product, onDelete }: ProductListItemPr
     <>
       <div className="catalog-item__data">
         <img
-          src={`http://localhost:3333/static/${product.photo}`}
+          src={`${BACKEND_STATIC_URL}/${product.photo}`}
           width="36"
           height="93"
           alt={product.title}

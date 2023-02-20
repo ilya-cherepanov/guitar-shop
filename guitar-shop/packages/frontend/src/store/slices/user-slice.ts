@@ -22,7 +22,7 @@ const initialState: UserState = {
   error: null,
 };
 
-export const checkUser = createAsyncThunk('user/check', async (_, {dispatch}) => {
+export const checkUser = createAsyncThunk('user/check', async () => {
   if (!getToken()) {
     throw new Error('Not found user token!');
   }
@@ -32,7 +32,7 @@ export const checkUser = createAsyncThunk('user/check', async (_, {dispatch}) =>
 });
 
 
-export const loginUser = createAsyncThunk('user/login', async (credentials: LoginUserRequest, {dispatch}) => {
+export const loginUser = createAsyncThunk('user/login', async (credentials: LoginUserRequest) => {
   try {
     const {data} = await api.post<UserTokenResponse>('/auth/login', credentials);
     saveToken(data.accessToken);
@@ -48,10 +48,18 @@ export const loginUser = createAsyncThunk('user/login', async (credentials: Logi
 
 
 export const registerUser = createAsyncThunk('user/register', async (registerData: RegisterUserRequest) => {
-  const {data} = await api.post<UserTokenResponse>('/auth/register', registerData);
-  saveToken(data.accessToken);
+  try {
+    const {data} = await api.post<UserTokenResponse>('/auth/register', registerData);
+    saveToken(data.accessToken);
 
-  return data;
+    return data;
+  } catch (err) {
+    if (isAxiosError(err) && err.response?.status === HttpStatusCode.BadRequest) {
+      toast.error(INCORRECT_FORM);
+    }
+
+    throw err;
+  }
 });
 
 
