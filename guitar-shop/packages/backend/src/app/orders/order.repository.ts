@@ -103,49 +103,6 @@ export class OrderRepository {
     };
   }
 
-  public async updateOrdersPrice(productId: number) {
-    const orders = await this.prismaService.order.findMany({
-      where: {
-        orderItems: {
-          some: {productId},
-        },
-      },
-      include: {
-        orderItems: {
-          include: { product: true },
-        },
-      },
-    });
-
-    const updatedOrders = orders.map((order) => {
-      const updatedOrderItems = order.orderItems.map(
-        (orderItem) => orderItem.productId === productId
-          ? {
-            orderId: orderItem.orderId,
-            productId: orderItem.productId,
-            quantity: orderItem.quantity,
-            sumPrice: orderItem.product.price.mul(orderItem.quantity)
-          }
-          : orderItem
-      );
-
-      const updatedSumPrice = updatedOrderItems.reduce(
-        (sum, orderItem) => sum.add(orderItem.sumPrice),
-        new Prisma.Decimal(0),
-      );
-
-      return {
-        ...order,
-        orderItems: updatedOrderItems,
-        sumPrice: updatedSumPrice,
-      };
-    });
-
-    await this.prismaService.order.updateMany({
-      data: updatedOrders,
-    });
-  }
-
   public async delete(orderId: number): Promise<void> {
     try {
       await this.prismaService.order.delete({where: {id: orderId}});

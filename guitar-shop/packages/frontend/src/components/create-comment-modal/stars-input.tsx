@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from 'react';
+import React, { ChangeEventHandler } from 'react';
 import { RatePlural } from '../../constants';
 
 interface StarsInputProps {
@@ -9,7 +9,7 @@ interface StarsInputProps {
 export default function StarsInput({ onChange, value }: StarsInputProps) {
   const stars: JSX.Element[] = [];
 
-  const handleClick: MouseEventHandler<HTMLInputElement> = (evt) => {
+  const handleClick: ChangeEventHandler<HTMLInputElement> = (evt) => {
     const target = evt.target as HTMLInputElement;
     onChange(Number(target.value));
   }
@@ -23,7 +23,7 @@ export default function StarsInput({ onChange, value }: StarsInputProps) {
           name="rate"
           type="radio"
           value={i}
-          onClick={handleClick}
+          onChange={handleClick}
           checked={value === i}
         />
         <label className="rate__label" htmlFor={`star-${i}`} title={RatePlural[i as 1 | 2 | 3 | 4 | 5]}></label>

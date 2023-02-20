@@ -5,6 +5,7 @@ import Spinner from '../../components/spinner/spinner';
 import { LoadingStatus } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchOneOrder, selectOneOrder, selectOneOrderStatus } from '../../store/slices/one-order-slice';
+import { deleteOrder } from '../../store/slices/orders-slice';
 import { formatDate, formatOrderId } from '../../utils';
 import NotFound from '../not-found/not-found';
 import OrderItem from './order-item';
@@ -16,13 +17,19 @@ export default function Order() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate()
 
-  const fetch = useCallback(() => {
+  const fetch = useCallback(async () => {
     dispatch(fetchOneOrder(Number(id)));
   }, [dispatch, id]);
 
   useEffect(() => {
+    if (order && order.orderItems.length === 0) {
+      dispatch(deleteOrder(Number(id)));
+      navigate('/order-list');
+      return;
+    }
+
     fetch();
-  }, [dispatch, id, fetch]);
+  }, [dispatch, id, fetch, order, navigate]);
 
   if (loadingStatus === LoadingStatus.Failed) {
     return <NotFound />;

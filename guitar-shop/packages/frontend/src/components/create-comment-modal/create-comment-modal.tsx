@@ -18,7 +18,7 @@ export default function CreateCommentModal({productTitle, onCreate, onClose}: Cr
   const [text, setText] = useState<string | null>(null);
   const [rate, setRate] = useState(0);
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (evt) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (evt) => {
     evt.preventDefault();
 
     if (advantages && disadvantages && text) {
@@ -29,7 +29,6 @@ export default function CreateCommentModal({productTitle, onCreate, onClose}: Cr
         rating: rate,
       });
     }
-
     onClose();
   };
 

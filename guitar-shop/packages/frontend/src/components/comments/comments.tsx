@@ -48,6 +48,7 @@ export default function Comments({productId, productTitle}: CommentsProps) {
     await dispatch(createComment({...data, id: productId})).unwrap();
     setShowCreateForm(false);
     setShowSuccessModal(true);
+    await dispatch(fetchComments(productId)).unwrap();
   };
 
   return (

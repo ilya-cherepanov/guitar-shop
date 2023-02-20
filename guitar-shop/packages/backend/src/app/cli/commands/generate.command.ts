@@ -24,7 +24,6 @@ export class GenerateCommand extends CommandRunner {
   async run([n, connectionString]: string[]): Promise<void> {
     const numberOfProductsToGenerate = this.cliUtilityService.parseInt(n, 10);
 
-    // process.env.DATABASE_URL = 'postgresql://admin:password1234@localhost:5432/guitar-shop';
     process.env.DATABASE_URL = connectionString;
     this.prismaClient = new PrismaClient();
 

@@ -13,8 +13,9 @@
 
 1. Из корневой директории переместитесь в директорию `/guitar-store/packages/backend/prisma`, создайте `.env` файл и добавьте connection string, как в файле `.env-example`.
 2. Из корневой директории проекта перейдите в директорию `/guitar-store/packages/backend` и выполните `docker compose up -d`.
-3. Из корневой директории переместитесь в директорию `guitar-store` и выполните `npm run cli generate`. Можно получить справку по команде выполнив `npm run cli help`.
-4. Выполните `npx nx run backend:serve` для запуска backend-сервера
+3. Из корневой директории перейдите в директорию `/guitar-store` и выполните `npx nx run backend:db-migrate` для миграции бд
+4. Далее выполните `npm run cli generate`. Можно получить справку по команде выполнив `npm run cli help`.
+5. Выполните `npx nx run backend:serve` для запуска backend-сервера
 
 ### Frontend
 
