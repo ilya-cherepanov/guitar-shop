@@ -1,7 +1,7 @@
 import { Order, SortOrder } from '@guitar-shop/shared-types';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PRISMA_NOT_FOUND_CODE } from '../constants';
+import { ORDER_NOT_FOUND, PRISMA_NOT_FOUND_CODE } from '../constants';
 import { PrismaService } from '../prisma/prisma.service';
 import { OrderEntity } from './entities/order.entity';
 
@@ -117,6 +117,11 @@ export class OrderRepository {
   }
 
   public async deleteOrderItem(orderId: number, productId: number): Promise<void> {
+    const order = await this.prismaService.order.findFirst();
+    if (!order) {
+      throw new NotFoundException(ORDER_NOT_FOUND)
+    }
+
     try {
       await this.prismaService.orderItem.delete({where: {orderId_productId: {
         orderId,
@@ -130,5 +135,20 @@ export class OrderRepository {
           throw err;
         }
     }
+
+    const newSumPrice = (await this.prismaService.orderItem.aggregate({
+      where: {orderId: order.id},
+      _sum: {
+        sumPrice: true,
+      },
+    }))._sum.sumPrice;
+
+    await this.prismaService.order.update({
+      where: {id: order.id},
+      data: {
+        ...order,
+        sumPrice: newSumPrice,
+      },
+    });
   }
 }

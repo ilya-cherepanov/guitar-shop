@@ -7,7 +7,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { ProductFilters } from '../../types/product-filters.interface';
 import { SortingParams } from '../../types/sorting-params.interface';
-import { PRISMA_NOT_FOUND_CODE, PRODUCT_NOT_FOUND } from '../constants';
+import { PRISMA_NOT_FOUND_CODE, ProductPrice, PRODUCT_NOT_FOUND } from '../constants';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProductEntity } from './product.entity';
 
@@ -77,8 +77,8 @@ export class ProductRepository {
     });
 
     return {
-      minPrice: prices._min.price.toNumber(),
-      maxPrice: prices._max.price.toNumber(),
+      minPrice: prices._min.price?.toNumber() ?? ProductPrice.Min,
+      maxPrice: prices._max.price?.toNumber() ?? ProductPrice.Max,
     };
   }
 
